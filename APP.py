@@ -3,63 +3,66 @@ import streamlit as st
 # --- PAGE SETUP ---
 st.set_page_config(page_title="South Asian Precision Cardio-Risk", layout="centered")
 
-# --- CUSTOM STYLING (The Ivy Aesthetic) ---
+# --- UI FIX: HIGH CONTRAST & CENTERING ---
 st.markdown("""
     <style>
-    /* Change font color in the metric boxes to be dark and visible */
+    /* 1. Force metric numbers to be DEEP BLACK for visibility */
     [data-testid="stMetricValue"] {
-        color: #1a1a1a !important;
-        font-weight: bold !important;
+        color: #000000 !important;
+        font-weight: 800 !important;
+        font-size: 2.5rem !important;
     }
+    /* 2. Make labels dark grey */
     [data-testid="stMetricLabel"] {
-        color: #333333 !important;
+        color: #222222 !important;
+        font-weight: 600 !important;
     }
-    .main { background-color: #f8f9fa; }
+    /* 3. Center the title and intro */
+    .stApp {
+        background-color: #0e1117;
+    }
+    h1, h3 {
+        text-align: center;
+    }
     </style>
     """, unsafe_allow_html=True)
 
 # --- SCIENTIFIC LOGIC ---
 def calculate_vai(gender, bmi, wc, tg, hdl):
-    """Calculates Visceral Adiposity Index (VAI) - Cite: Amato et al. 2010"""
     if gender == "Male":
         return (wc / (39.68 + (1.88 * bmi))) * (tg / 1.03) * (1.31 / hdl)
     return (wc / (36.58 + (1.89 * bmi))) * (tg / 0.81) * (1.52 / hdl)
 
-# --- MAIN DASHBOARD ---
+# --- MAIN INTERFACE ---
 st.title("🫀 South Asian Precision Cardio-Risk Tool")
-st.markdown("""
-    **Objective:** This tool identifies the **'Metabolically Obese Normal Weight' (MONW)** phenotype. 
-    Standard ASCVD scores often fail South Asian patients by over-relying on BMI.
-""")
-
+st.markdown("### Precision Metabolic Assessment for MONW Phenotypes")
 st.divider()
 
-# --- CENTRALIZED INPUT SECTION ---
-st.header("📋 Clinical Parameters")
-col_in1, col_in2 = st.columns(2)
+# --- CENTRALIZED INPUTS ---
+# Using columns to organize the middle section
+col_a, col_b = st.columns(2)
 
-with col_in1:
+with col_a:
     gender = st.radio("Biological Sex", ["Male", "Female"])
     age = st.number_input("Chronological Age", 18, 95, 25)
     bmi = st.slider("BMI (kg/m²)", 15.0, 45.0, 22.0)
 
-with col_in2:
+with col_b:
     wc = st.number_input("Waist Circumference (cm)", 60, 150, 85)
     tg = st.number_input("Triglycerides (mmol/L)", 0.5, 10.0, 1.5)
     hdl = st.number_input("HDL Cholesterol (mmol/L)", 0.5, 3.5, 1.1)
 
 lpa = st.number_input("Lipoprotein(a) (mg/dL) [Optional]", 0, 300, 0)
 
-st.markdown("---")
+st.divider()
 
-# --- RESULTS SECTION ---
+# --- ACTION & RESULTS ---
 if st.button("Generate Risk Analysis", use_container_width=True):
     vai = calculate_vai(gender, bmi, wc, tg, hdl)
     
-    # Risk Logic (Evidence-based offsets)
+    # Calculation Logic
     met_age = age
     risks = []
-    
     if vai > 1.9:
         met_age += 5
         risks.append("High Visceral Adiposity (VAI > 1.9)")
@@ -67,11 +70,13 @@ if st.button("Generate Risk Analysis", use_container_width=True):
         met_age += 8
         risks.append("Elevated Genetic Risk (Lp(a) > 50 mg/dL)")
 
-    # Display Metrics with visible dark font
-    col1, col2, col3 = st.columns(3)
-    col1.metric("VAI Index", round(vai, 2))
-    col2.metric("Chronological Age", age)
-    col3.metric("Metabolic Age", round(met_age), delta=int(met_age-age), delta_color="inverse")
+    # The 3 White Boxes with Visible Numbers
+    m_col1, m_col2, m_col3 = st.columns(3)
+    m_col1.metric("VAI Index", round(vai, 2))
+    m_col2.metric("Chronological Age", age)
+    m_col3.metric("Metabolic Age", round(met_age), delta=int(met_age-age), delta_color="inverse")
+
+    st.markdown("---")
 
     if met_age > age:
         st.error(f"### ⚠️ Metabolic Dysregulation Detected")
@@ -82,10 +87,6 @@ if st.button("Generate Risk Analysis", use_container_width=True):
         st.success("### ✅ Optimal Metabolic Profile")
         st.write("Current biomarkers suggest visceral fat function is within healthy South Asian reference ranges.")
 
-# --- THE SCIENCE SECTION ---
+# --- SCIENCE SECTION ---
 with st.expander("📚 Scientific Basis & Citations"):
-    st.write("""
-        ### Methodology:
-        1. **VAI (Visceral Adiposity Index):** A sex-specific mathematical model that outperforms BMI in predicting cardiometabolic risk.
-        2. **Citations:** Amato MC, et al. *Diabetes Care*. 2010; Enas EA, et al. *JAMA*. 2004.
-    """)
+    st.write("Amato MC, et al. *Diabetes Care*. 2010; Enas EA, et al. *JAMA*. 2004.")
