@@ -1,7 +1,7 @@
 import streamlit as st
 
 # --- PAGE SETUP ---
-st.set_page_config(page_title="South Asian Precision Cardio-Risk", layout="centered")
+st.set_page_config(page_title="Visceral Adiposity Index Calculator", layout="centered")
 
 # --- UI FIX: WHITE TEXT ON DARK BACKGROUND ---
 st.markdown("""
@@ -36,7 +36,7 @@ def calculate_vai(gender, bmi, wc, tg, hdl):
     return (wc / (36.58 + (1.89 * bmi))) * (tg / 0.81) * (1.52 / hdl)
 
 # --- MAIN INTERFACE ---
-st.title("🫀 South Asian Precision Cardio-Risk Tool")
+st.title("🫀 Visceral Adiposity Index Calculator")
 st.markdown("### Precision Metabolic Assessment for MONW Phenotypes")
 st.divider()
 
