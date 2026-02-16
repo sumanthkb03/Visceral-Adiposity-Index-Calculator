@@ -3,32 +3,34 @@ import streamlit as st
 # --- PAGE SETUP ---
 st.set_page_config(page_title="South Asian Precision Cardio-Risk", layout="centered")
 
-# --- UI FIX: HIGH CONTRAST & CENTERING ---
+# --- UI FIX: WHITE TEXT ON DARK BACKGROUND ---
 st.markdown("""
     <style>
-    /* 1. Force metric numbers to be DEEP BLACK for visibility */
+    /* 1. Force metric numbers to be PURE WHITE */
     [data-testid="stMetricValue"] {
-        color: #000000 !important;
+        color: #ffffff !important;
         font-weight: 800 !important;
         font-size: 2.5rem !important;
     }
-    /* 2. Make labels dark grey */
+    /* 2. Make metric labels light grey for contrast */
     [data-testid="stMetricLabel"] {
-        color: #222222 !important;
+        color: #cccccc !important;
         font-weight: 600 !important;
     }
-    /* 3. Center the title and intro */
+    /* 3. Center and style the background */
     .stApp {
         background-color: #0e1117;
     }
     h1, h3 {
         text-align: center;
+        color: #ffffff;
     }
     </style>
     """, unsafe_allow_html=True)
 
 # --- SCIENTIFIC LOGIC ---
 def calculate_vai(gender, bmi, wc, tg, hdl):
+    """Calculates Visceral Adiposity Index (VAI)"""
     if gender == "Male":
         return (wc / (39.68 + (1.88 * bmi))) * (tg / 1.03) * (1.31 / hdl)
     return (wc / (36.58 + (1.89 * bmi))) * (tg / 0.81) * (1.52 / hdl)
@@ -39,7 +41,6 @@ st.markdown("### Precision Metabolic Assessment for MONW Phenotypes")
 st.divider()
 
 # --- CENTRALIZED INPUTS ---
-# Using columns to organize the middle section
 col_a, col_b = st.columns(2)
 
 with col_a:
@@ -60,7 +61,6 @@ st.divider()
 if st.button("Generate Risk Analysis", use_container_width=True):
     vai = calculate_vai(gender, bmi, wc, tg, hdl)
     
-    # Calculation Logic
     met_age = age
     risks = []
     if vai > 1.9:
@@ -70,7 +70,7 @@ if st.button("Generate Risk Analysis", use_container_width=True):
         met_age += 8
         risks.append("Elevated Genetic Risk (Lp(a) > 50 mg/dL)")
 
-    # The 3 White Boxes with Visible Numbers
+    # Results Displayed in White Text
     m_col1, m_col2, m_col3 = st.columns(3)
     m_col1.metric("VAI Index", round(vai, 2))
     m_col2.metric("Chronological Age", age)
