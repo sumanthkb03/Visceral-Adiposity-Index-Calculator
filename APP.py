@@ -1,7 +1,7 @@
 import streamlit as st
 
 # --- PAGE SETUP ---
-st.set_page_config(page_title="South Asian Precision Cardio-Risk", layout="centered")
+st.set_page_config(page_title="Global Precision Cardio-Metabolic Tool", layout="centered")
 
 # --- UI FIX: WHITE TEXT & DARK THEME ---
 st.markdown("""
@@ -28,8 +28,8 @@ def calculate_vai(gender, bmi, wc, tg, hdl):
     return (wc / (36.58 + (1.89 * bmi))) * (tg / 0.81) * (1.52 / hdl)
 
 # --- HEADER ---
-st.title("🫀 South Asian Precision Cardio-Risk Tool")
-st.markdown("### Precision Metabolic Assessment for the 'Thin-Fat' Phenotype")
+st.title("🫀 Global Precision Cardio-Metabolic Tool")
+st.markdown("### Assessing Adipose Tissue Dysfunction and 'Hidden' Metabolic Risk")
 st.divider()
 
 # --- INPUTS ---
@@ -50,6 +50,7 @@ lpa = st.number_input("Lipoprotein(a) (mg/dL) [Optional]", 0, 300, 0)
 if st.button("Generate Risk Analysis", use_container_width=True):
     vai = calculate_vai(gender, bmi, wc, tg, hdl)
     met_age = age
+    # Global thresholds for VAI and Lp(a)
     if vai > 1.9: met_age += 5
     if lpa > 50: met_age += 8
 
@@ -60,34 +61,37 @@ if st.button("Generate Risk Analysis", use_container_width=True):
 
     st.divider()
 
-# --- DETAILED SCIENTIFIC DESCRIPTION (EVERY SENTENCE CITED) ---
+# --- DETAILED SCIENTIFIC DESCRIPTION (CITED) ---
 st.header("📖 Clinical Rationale")
 
 st.markdown("""
 **What is the Visceral Adiposity Index (VAI)?**
-* The VAI is a sex-specific mathematical model that serves as an indirect proxy for visceral fat function and adipose tissue dysregulation. 
-* It integrates anthropometric data (BMI and Waist Circumference) with functional metabolic markers (Triglycerides and HDL). 
-* Unlike standard BMI, the VAI can identify "Metabolically Obese, Normal Weight" (MONW) individuals who appear healthy but carry significant internal risk.
+* The VAI is a sex-specific mathematical model that serves as a reliable indicator of visceral fat function and cellular adipose tissue dysregulation. 
+* It integrates anthropometric data (BMI and Waist Circumference) with functional metabolic markers (Triglycerides and HDL) to provide a holistic risk profile. 
+* Traditional metrics like BMI fail to differentiate between subcutaneous fat and dangerous ectopic visceral fat.
+* Consequently, the VAI identifies "Metabolically Obese, Normal Weight" (MONW) individuals who possess high cardiovascular risk despite a standard body weight.
 
-**Why is it helpful for South Asian populations?**
-* South Asians frequently exhibit the "Thin-Fat" phenotype, characterized by high visceral adiposity despite a relatively low Body Mass Index. 
-* Standard ASCVD risk calculators often underestimate cardiovascular events in South Asians because they do not account for this specific adipose distribution. 
-* Research indicates that South Asians possess a higher percentage of body fat at lower BMI levels compared to Caucasian populations.
-* Incorporating Lipoprotein(a) is essential, as it is a genetically determined, independent causal factor for atherosclerosis that is often elevated in South Asian lineages.
-* Identifying these markers early allows for targeted lifestyle and pharmacological interventions to prevent premature coronary artery disease.
+**Global Clinical Utility**
+* Across diverse global populations, obesity and metabolic syndrome are rising sharply due to nutritional and lifestyle shifts. 
+* High visceral adiposity is a primary driver of systemic inflammation and insulin resistance regardless of geographic location. 
+* Early intervention through lifestyle modification or metformin has been proven to significantly reduce diabetes incidence.
+* Cardiovascular disease prediction requires integrating multiple risk factor categories rather than relying on isolated variables.
+* Lipoprotein(a) is a genetically determined, independent causal factor for atherosclerosis and is a critical "risk-enhancing" marker for patients worldwide.
+* Managing blood cholesterol through targeted, precision assessment is now the global gold standard for preventing premature mortality.
+* Global health equity requires using advanced metrics to uncover hidden risks in populations that do not fit traditional "obese" phenotypes.
 """)
 
 # --- CITATION LIST ---
 with st.expander("📚 Complete Peer-Reviewed References"):
     st.write("""
-    1. Amato MC, et al. Diabetes Care. 2010.
-    2. Enas EA, et al. J CardioMetab Syndr. 2007.
-    3. Misra A, et al. J Clin Endocrinol Metab. 2009.
-    4. Toth PP, et al. Eur J Prev Cardiol. 2019.
-    5. Amato MC & Giordano C. Expert Rev Endocrinol Metab. 2014.
-    6. Unni S, et al. Glob Health Action. 2014.
-    7. Yajnik CS, et al. Int J Obes. 2003.
-    8. Knowler WC, et al. N Engl J Med. 2002.
-    9. Wilson PW, et al. Circulation. 1998.
-    10. Grundy SM, et al. J Am Coll Cardiol. 2019.
+    1. Amato MC, et al. *Diabetes Care*. 2010.
+    2. Enas EA, et al. *J CardioMetab Syndr*. 2007.
+    3. Misra A, et al. *J Clin Endocrinol Metab*. 2009.
+    4. Toth PP, et al. *Eur J Prev Cardiol*. 2019.
+    5. Amato MC & Giordano C. *Expert Rev Endocrinol Metab*. 2014.
+    6. Unni S, et al. *Glob Health Action*. 2014.
+    7. Yajnik CS, et al. *Int J Obes*. 2003.
+    8. Knowler WC, et al. *N Engl J Med*. 2002.
+    9. Wilson PW, et al. *Circulation*. 1998.
+    10. Grundy SM, et al. *J Am Coll Cardiol*. 2019.
     """)
